@@ -1,1 +1,6 @@
+com/assignment/employeeBoard/repository/EmployeeRepository.class
+com/assignment/employeeBoard/entity/Employee.class
+com/assignment/employeeBoard/service/EmployeeService.class
+com/assignment/employeeBoard/controller/EmployeeController.class
 com/assignment/employeeBoard/EmployeeBoardApplication.class
+com/assignment/employeeBoard/service/EmployeeServiceImpl.class
