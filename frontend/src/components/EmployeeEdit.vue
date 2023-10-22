@@ -29,7 +29,7 @@
             <label htmlFor="salary">salary</label>
             <input
               v-model="employee.employeeSalary"
-              type="text"
+              type="number"
               class="form-control"
               id="salary"
               name="salary"
@@ -64,39 +64,72 @@ export default {
 
   data() {
     return {
-      employee: {
-        firstname: "",
-        lastname: "",
-        salary: 0,
+        employee: {
+        employeeFirstName: "",
+        employeeLastName: "",
+        employeeSalary: 0.0,
       },
       isSaving: false,
     };
   },
 
   created() {
-    const id = this.$route.params.id;
-    apiService
-      .updateEmployee(id, this.employee)
-      .then((response) => {
-        let employeeInfo = response.data;
-        this.employee.firstname = employeeInfo.employeeFirstName;
-        this.employee.lastname = employeeInfo.employeeLastName;
-        this.employee.salary = employeeInfo.employeeSalary;
-        return response;
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "An Error Occured!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        return error;
-      });
+    this.fetchEmployeeData();
   },
 
   methods: {
+    fetchEmployeeData() {
+      const id = this.$route.params.id;
+      apiService
+        .getEmployeeById(id)
+        .then((response) => {
+          this.employee.employeeFirstName = response.data.employeeFirstName;
+          this.employee.employeeLastName = response.data.employeeLastName;
+          this.employee.employeeSalary = response.data.employeeSalary;
+        })
+        .catch(() => {
+          Swal.fire({
+            icon: "error",
+            title: "An Error Occured!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
+    },
+    isValidForm() {
+      if (!this.employee.employeeFirstName.trim() || !this.employee.employeeLastName.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Please fill in all the fields!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+      if (/[0-9!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]+/.test(this.employee.employeeFirstName) || /[0-9!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]+/.test(this.employee.employeeLastName)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Names should not contain numbers or special characters!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+    if (isNaN(this.employee.employeeSalary) || this.employee.employeeSalary < 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Salary should be a positive number!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+    return true;
+  },
     handleSave() {
+      if (!this.isValidForm()) {
+        return;
+      }
       this.isSaving = true;
       const id = this.$route.params.id;
       apiService
@@ -109,9 +142,9 @@ export default {
             timer: 1500,
           });
           this.isSaving = false;
-          this.employee.firstname = "";
-          this.employee.lastname = "";
-          this.employee.salary = "";
+        //   this.employee.employeeFirstname = "";
+        //   this.employee.employeeLastname = "";
+        //   this.employee.employeeSalary = "";
           return response;
         })
         .catch((error) => {

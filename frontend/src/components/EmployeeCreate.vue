@@ -63,23 +63,58 @@ export default {
   data() {
     return {
       employee: {
-        firstname: "",
-        lastname: "",
-        salary: 0.0,
+        employeeFirstName: "",
+        employeeLastName: "",
+        employeeSalary: 0.0,
       },
       isSaving: false,
     };
   },
   
   methods: {
+    isValidForm() {
+      if (!this.employee.employeeFirstName.trim() || !this.employee.employeeLastName.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: "Please fill in all the fields!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+      if (/[0-9!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]+/.test(this.employee.employeeFirstName) || /[0-9!@#$%^&*()_+\-=\\[\]{};':"\\|,.<>\\/?]+/.test(this.employee.employeeLastName)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Names should not contain numbers or special characters!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+    if (isNaN(this.employee.employeeSalary) || this.employee.employeeSalary < 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Salary should be a positive number!",
+        showConfirmButton: true,
+      });
+      return false;
+    }
+
+    return true;
+  },
+  
+
     handleSave() {
+      if (!this.isValidForm()) {
+        return;
+      }
       this.isSaving = true;
       apiService
         .createEmployee(this.employee)
         .then((response) => {
           Swal.fire({
             icon: "success",
-            title: "Project saved successfully!",
+            title: "Employee information saved successfully!",
             showConfirmButton: false,
             timer: 1500,
           });
