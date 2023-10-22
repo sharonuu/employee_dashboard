@@ -7,6 +7,10 @@ export default {
     return axios.get(`${API_URL}/employee`);
   },
 
+  getEmployeeById(id) {
+    return axios.get(`${API_URL}/employee/${id}`);
+  },
+
   createEmployee(employee) {
     return axios.post(`${API_URL}/employee`, employee);
   },
