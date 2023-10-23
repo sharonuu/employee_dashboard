@@ -59,6 +59,7 @@ import LayoutDiv from "./LayoutDiv.vue";
 import apiService from "@/services/apiService";
 import Swal from "sweetalert2";
 
+
 export default {
   name: "EmployeeList",
 
@@ -69,14 +70,25 @@ export default {
   data() {
     return {
       employees: [],
+      query: {
+        page: 1,
+        search: "",
+      }
     };
   },
+  computed: {
+    totalEmployees() {
+      return this.employees.length;
+    }
+  },
+
 
   created() {
     this.retrieveEmployees();
   },
 
   methods: {
+
     /*
             function for normalizing the salary currency
             @param: salary value
