@@ -63,10 +63,6 @@ The application will be accessible at `http://localhost:8080` (or another port i
 - **Backend:** Spring Boot for REST API and MySQL for database storage.
 - **Frontend:** Vue.js for the frontend framework, Bootstrap for styling, and SweetAlert for user notifications and alerts.
 
-# Employee Management API
-
-Our Employee Management API allows clients to perform CRUD operations related to employees in the system.
-
 ## API Endpoints
 
 | Endpoint                  | HTTP Method | Description                               | Request Body                                                        | Response Body                   |
