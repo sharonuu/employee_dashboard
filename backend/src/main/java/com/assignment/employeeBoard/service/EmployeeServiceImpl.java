@@ -5,56 +5,60 @@ import com.assignment.employeeBoard.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
     @Autowired
-    private EmployeeRepository employeeRepository;
-
-    public EmployeeServiceImpl() {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
+    @Override
     public Employee saveEmployee(Employee employee) {
-        return (Employee)this.employeeRepository.save(employee);
+        return employeeRepository.save(employee);
     }
 
+    @Override
     public List<Employee> fetchAllEmployees() {
-        List<Employee> allEmployee = this.employeeRepository.findAll();
-        return allEmployee;
+        return employeeRepository.findAll();
     }
 
+    @Override
     public Employee getEmployeeById(Long id) {
-        Optional<Employee> employee = this.employeeRepository.findById(id);
-        return employee.isPresent() ? (Employee)employee.get() : null;
+        return employeeRepository.findById(id).orElse(null);
     }
 
-    public Employee updateEmployeeById(Long id, Employee employee) {
-        Optional<Employee> employee1 = this.employeeRepository.findById(id);
-        if (employee1.isPresent()) {
-            Employee originalEmployee = (Employee)employee1.get();
-            if (Objects.nonNull(employee.getEmployeeFirstName()) && !"".equalsIgnoreCase(employee.getEmployeeFirstName())) {
-                originalEmployee.setEmployeeFirstName(employee.getEmployeeFirstName());
-            }
+    @Override
+    public Employee updateEmployeeById(Long id, Employee updatedEmployee) {
+        return employeeRepository.findById(id)
+                .map(originalEmployee -> {
+                    updateIfNotNullOrEmpty(originalEmployee::setEmployeeFirstName, updatedEmployee.getEmployeeFirstName());
+                    updateIfNotNullOrEmpty(originalEmployee::setEmployeeLastName, updatedEmployee.getEmployeeLastName());
+                    if (updatedEmployee.getEmployeeSalary() != 0.0F) {
+                        originalEmployee.setEmployeeSalary(updatedEmployee.getEmployeeSalary());
+                    }
+                    return employeeRepository.save(originalEmployee);
+                })
+                .orElse(null);
+    }
 
-            if (Objects.nonNull(employee.getEmployeeLastName()) && !"".equalsIgnoreCase(employee.getEmployeeLastName())) {
-                originalEmployee.setEmployeeLastName(employee.getEmployeeLastName());
-            }
-
-            if (Objects.nonNull(employee.getEmployeeSalary()) && employee.getEmployeeSalary() != 0.0F) {
-                originalEmployee.setEmployeeSalary(employee.getEmployeeSalary());
-            }
-
-            return (Employee)this.employeeRepository.save(originalEmployee);
-        } else {
-            return null;
+    private void updateIfNotNullOrEmpty(Consumer<String> setter, String value) {
+        if (value != null && !value.trim().isEmpty()) {
+            setter.accept(value);
         }
     }
 
+    @Override
     public String deleteEmployeeById(Long id) {
-        if (this.employeeRepository.findById(id).isPresent()) {
-            this.employeeRepository.deleteById(id);
+        if (employeeRepository.existsById(id)) {
+            employeeRepository.deleteById(id);
             return "Employee deleted successfully!";
         } else {
             return "No such employee in the database";
