@@ -1,6 +1,7 @@
 <template>
+  <HeaderNav> </HeaderNav>
   <div class="container">
-    <HeaderNav> </HeaderNav>
+    
     <WidgetList></WidgetList>
     <slot></slot>
   </div>

@@ -15,6 +15,7 @@
     "sweetalert2": "^11.7.32",
     "vue": "^3.2.13",
     "vue-router": "^4.2.5",
+    "vuejs-paginate": "^2.1.0",
     "vuetify": "^3.3.22"
   },
   "devDependencies": {

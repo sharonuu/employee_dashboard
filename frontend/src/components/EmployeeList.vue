@@ -1,56 +1,61 @@
 <template>
   <layout-div>
     <div class="container">
-      <h2 class="text-center mt-5 mb-3">Employee List</h2>
-      <!-- <div class="card"> -->
-      <!-- <div class="card-body"> -->
-
-      <!-- <div class="mb-3 flex">
-                        <input 
-                        type="text"
-                        v-model="searchQuery"
-                        class="form-control w-50 mx-auto"
-                        placeholder="first name">
-                        <button @click="executeSearch" class="btn btn-outline-primary mx-1">Search</button>
-                    </div> -->
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Salary</th>
-            <th width="240px">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="e in employees" :key="e.employeeId">
-            <td>{{ e.employeeFirstName }}</td>
-            <td>{{ e.employeeLastName }}</td>
-            <td>${{ formatCurrency(e.employeeSalary) }}</td>
-            <td>
-              <router-link
-                :to="`/edit/${e.employeeId}`"
-                class="btn btn-outline-success mx-1"
-                >Edit</router-link
-              >
-              <button
-                @click="handleDelete(e.employeeId)"
-                className="btn btn-outline-danger mx-1"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="card-button">
-        <router-link to="/create" class="btn btn-outline-primary"
-          >Add new employee
-        </router-link>
+    <h3 class="mt-5 mb-3" style="color:darkcyan;">Employee List</h3> 
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <form class="d-flex ms-auto align-items-center" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <router-link to="/create" class="btn mb-2 icon-large" style="margin-right: 1rem;">
+              <i class="bi bi-person-fill-add"></i>
+            </router-link>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover" id="employee-table" >
+            <thead>
+              <tr>
+                <th>EmpId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Salary</th>
+                <th width="240px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="e in employees" :key="e.employeeId">
+                <td>{{ e.employeeId }}</td>
+                <td>{{ e.employeeFirstName }}</td>
+                <td>{{ e.employeeLastName }}</td>
+                <td>${{ formatCurrency(e.employeeSalary) }}</td>
+                <td>
+                  <router-link
+                    :to="`/edit/${e.employeeId}`"
+                    class="btn btn-outline-success mx-1"
+                  >Edit</router-link>
+                  <button
+                    @click="handleDelete(e.employeeId)"
+                    class="btn btn-outline-danger mx-1"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="card-footer">
+            <pagination
+              v-model="currentPage"
+              :total-rows="totalEmployees"
+              :per-page="perPage"
+              aria-controls="employee-table"
+            ></pagination>
+            <p class="mt-3">Current Page: {{ currentPage }}</p>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- </div> -->
-    <!-- </div> -->
   </layout-div>
 </template>
 
@@ -59,21 +64,19 @@ import LayoutDiv from "./LayoutDiv.vue";
 import apiService from "@/services/apiService";
 import Swal from "sweetalert2";
 
-
 export default {
   name: "EmployeeList",
 
   components: {
-    LayoutDiv,
+    LayoutDiv
   },
 
   data() {
     return {
       employees: [],
-      query: {
-        page: 1,
-        search: "",
-      }
+      perPage: 3,
+      currentPage: 1,
+      isLoading: false
     };
   },
   computed: {
@@ -82,44 +85,45 @@ export default {
     }
   },
 
-
   created() {
     this.retrieveEmployees();
   },
 
   methods: {
-
     /*
             function for normalizing the salary currency
             @param: salary value
             @output: $100,000
         */
-    formatCurrency(value) {
-      return new Intl.NumberFormat("en-US", { style: "decimal" }).format(value);
+      formatCurrency(value) {
+        return new Intl.NumberFormat("en-US", { style: "decimal" }).format(value);
     },
-
     /*
             function for get all employees
             @param
             @output: all employees
         */
     retrieveEmployees() {
+      this.isLoading = true;
       apiService
         .fetchEmployees()
         .then((response) => {
           this.employees = response.data;
-          return response.data;
+          // Swal.fire("Success", "Employees fetched successfully", "success");
         })
         .catch((error) => {
-          return error;
+          // Swal.fire("Error", "Failed to fetch employees", "error");
+          console.error("Error fetching employees:", error);
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
-
     /*
-            function for delete single employee
-            @param: employee id
-            @output: successfully delete message or errors
-        */
+        function for delete single employee
+        @param: employee id
+        @output: successfully delete message or errors
+    */
     handleDelete(employeeId) {
       Swal.fire({
         title: "Are you sure?",
@@ -128,33 +132,43 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes, delete it!"
       }).then((result) => {
         if (result.isConfirmed) {
           apiService
             .deleteEmployee(employeeId)
-            .then((response) => {
-              Swal.fire({
-                icon: "success",
-                title: "Employee deleted successfully!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
+            .then(() => {
+              Swal.fire("Success", "Employee deleted successfully!", "success");
               this.retrieveEmployees();
-              return response;
             })
             .catch((error) => {
-              Swal.fire({
-                icon: "error",
-                title: "An Error Occured!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              return error;
+              Swal.fire("Error", "Failed to delete employee", "error");
+              console.error("Error deleting employee:", error);
             });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
+
+<style scoped>
+
+.card {
+  border-radius: 10px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-outline-primary, .btn-outline-success, .btn-outline-danger {
+  margin: 0.2rem;
+}
+
+.icon-large {
+    font-size: 2rem; 
+}
+</style>

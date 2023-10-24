@@ -65,9 +65,10 @@ export default {
   data() {
     return {
         employee: {
-        employeeFirstName: "",
-        employeeLastName: "",
-        employeeSalary: 0.0,
+          employeeId: "",
+          employeeFirstName: "",
+          employeeLastName: "",
+          employeeSalary: 0.0,
       },
       isSaving: false,
     };

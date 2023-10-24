@@ -9,7 +9,7 @@
             >
               All Employees
               <br>
-              <span class="badge badge-info">
+              <span class="badge badge-info" style="font-size:x-large;">
                 {{totalEmployees}}
               </span>
             </router-link>
@@ -17,9 +17,49 @@
           <div class="col-md-2">
             <router-link
               to="/"
-              class="btn btn-primary p-4 dashboard-widget"
+              class="btn btn-warning p-4 dashboard-widget"
             >
-              Create New Table <i class="fa fa-plus-circle" />
+              Average Salary
+              <br>
+              <span class="badge badge-info" style="font-size:x-large;">
+                {{totalEmployees}}
+              </span>
+            </router-link>
+          </div>
+          <div class="col-md-2">
+            <router-link
+              to="/"
+              class="btn btn-success p-4 dashboard-widget"
+            >
+              Minimum Salary
+              <br>
+              <span class="badge badge-info" style="font-size:x-large;">
+                {{totalEmployees}}
+              </span>
+            </router-link>
+          </div>
+          <div class="col-md-2">
+            <router-link
+              to="/"
+              class="btn btn-danger p-4 dashboard-widget"
+            >
+              Maximum Salary
+              <br>
+              <span class="badge badge-info" style="font-size:x-large;">
+                {{totalEmployees}}
+              </span>
+            </router-link>
+          </div>
+          <div class="col-md-2">
+            <router-link
+              to="/"
+              class="btn btn-info p-4 dashboard-widget"
+            >
+              Median Salary
+              <br>
+              <span class="badge badge-info" style="font-size:x-large;">
+                {{totalEmployees}}
+              </span>
             </router-link>
           </div>
         </div>
@@ -67,4 +107,14 @@
         },
     },
   };
-  </script>
+</script>
+<style>
+  .dashboard-widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px; /* Adjust this value as needed */
+}
+
+</style>

@@ -10,6 +10,14 @@
       <div class="card-body">
         <form>
           <div class="form-group">
+            <label htmlFor="firstname">EmpId</label>
+            <input
+              v-model="employee.employeeId"
+              type="text"
+              class="form-control"
+              id="EmpId"
+              name="EmpId"
+            />
             <label htmlFor="firstname">first name</label>
             <input
               v-model="employee.employeeFirstName"
@@ -63,6 +71,7 @@ export default {
   data() {
     return {
       employee: {
+        employeeId: "",
         employeeFirstName: "",
         employeeLastName: "",
         employeeSalary: 0.0,
@@ -73,7 +82,7 @@ export default {
   
   methods: {
     isValidForm() {
-      if (!this.employee.employeeFirstName.trim() || !this.employee.employeeLastName.trim()) {
+      if (!this.employee.employeeId.trim() || !this.employee.employeeFirstName.trim() || !this.employee.employeeLastName.trim()) {
       Swal.fire({
         icon: "warning",
         title: "Please fill in all the fields!",
@@ -119,6 +128,7 @@ export default {
             timer: 1500,
           });
           this.isSaving = false;
+          this.employee.employeeId = "";
           this.employee.firstname = "";
           this.employee.lastname = "";
           this.employee.salary = "";
