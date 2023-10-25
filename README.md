@@ -63,4 +63,23 @@ The application will be accessible at `http://localhost:8080` (or another port i
 - **Backend:** Spring Boot for REST API and MySQL for database storage.
 - **Frontend:** Vue.js for the frontend framework, Bootstrap for styling, and SweetAlert for user notifications and alerts.
 
+## API Endpoints
 
+| Endpoint                  | HTTP Method | Description                               | Request Body                                                        | Response Body                   |
+|--------------------------|-------------|----------------------------------------|-------------------------------------------------------------------|---------------------------------|
+| `/api/employee`           | `POST`      | Create a new employee                   | JSON of the employee (e.g., `{"employeeFirstName": "John"}`)      | JSON of the created employee    |
+| `/api/employees`          | `GET`       | Retrieve all employees                  | None                                                              | JSON array of all employees     |
+| `/api/employee/{id}`      | `GET`       | Retrieve a specific employee by its ID  | None                                                              | JSON of the retrieved employee  |
+| `/api/employee/{id}`      | `PUT`       | Update a specific employee's details    | JSON with details to update (e.g., `{"employeeFirstName": "Jane"}`)| JSON of the updated employee    |
+| `/api/employee/{id}`      | `DELETE`    | Delete a specific employee by its ID    | None                                                              | Message indicating success/failure  |
+
+### Sample Request and Response
+
+#### POST `/api/employee`
+**Request Body:**
+```json
+{
+    "employeeFirstName": "John",
+    "employeeLastName": "Doe",
+    "employeeSalary": 50000
+}

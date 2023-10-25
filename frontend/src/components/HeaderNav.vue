@@ -14,7 +14,7 @@
                             <router-link to="/"><i class="bi bi-telephone icon-margin icon-large"></i>Help</router-link>
                         </li>
                     </ul>
-                    
+
                 </div>
                 <button class="btn btn-outline-success" type="submit">Sign In</button>
             </div>
@@ -24,14 +24,14 @@
 <script>
 export default {
     name: "HeaderNav",
-    
+
 }
 </script>
 
 <style>
 
 .navbar-nav .nav-item {
-    margin-right: 25px; 
+    margin-right: 25px;
 }
 .navbar-nav .nav-item a:hover,
 .navbar-nav .nav-item router-link:hover {
@@ -39,14 +39,14 @@ export default {
 }
 .navbar-nav .nav-item a,
 .navbar-nav .nav-item router-link {
-    color: inherit; 
-    font-size: 1.2rem; 
+    color: inherit;
+    font-size: 1.2rem;
 }
 .icon-margin {
     margin-right: 6px;
 }
 .icon-large {
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
 }
 
 </style>

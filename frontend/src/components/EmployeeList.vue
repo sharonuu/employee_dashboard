@@ -1,7 +1,7 @@
 <template>
   <layout-div>
     <div class="container">
-    <h3 class="mt-5 mb-3" style="color:darkcyan;">Employee List</h3> 
+    <h3 class="mt-5 mb-3" style="color:darkcyan;">Employee List</h3>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" v-model="activeCheck" id="activeCheck" checked>
       <label class="form-check-label mr-5" for="activeCheck">
@@ -25,7 +25,7 @@
                     <option value="employeeLastName">Last Name</option>
                     <option value="employeeSalary">Salary</option>
                     <option value="employeePos">Position</option>
-                </select>  
+                </select>
                 <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
@@ -42,7 +42,7 @@
                   </label>
               </div>
             </div>
-            
+
         </div>
         <div class="card-body">
           <!-- Table view -->
@@ -81,7 +81,7 @@
               </tr>
             </tbody>
           </table>
-          
+
           <div class="row" v-else>
               <div class="col-md-4 mb-4" v-for="e in employees" :key="e.employeeId">
                   <div class="card h-100">
@@ -153,17 +153,17 @@ export default {
 
     const getSearchRes = async () => {
       try {
-        if (searchTerm.value) { 
+        if (searchTerm.value) {
           const response = await apiService.getSearch({
             params: {
               [selectedCategory.value]: searchTerm.value
             }
           });
           console.log("search ans",response.data);
-          employees.value = response.data; 
+          employees.value = response.data;
 
         } else {
-          retrieveEmployees(); 
+          retrieveEmployees();
         }
       } catch (error) {
         console.error('Error:', error);
@@ -197,7 +197,7 @@ export default {
           if (onLeaveCheck.value) {
             const onLeaveEmployees = await apiService.getOnleaveEmployees();
             fetchedEmployees = [...fetchedEmployees, ...onLeaveEmployees.data];
-          } 
+          }
         }
         employees.value = fetchedEmployees;
         console.log("get all data", fetchedEmployees)
@@ -227,7 +227,7 @@ export default {
         showTableView,
         isGridView
     }
-    
+
   },
 
   methods: {
@@ -239,8 +239,8 @@ export default {
       formatCurrency(value) {
         return new Intl.NumberFormat("en-US", { style: "decimal" }).format(value);
     },
-    
-    
+
+
     /*
         function for delete single employee
         @param: employee id
@@ -279,7 +279,7 @@ export default {
             case 'on leave':
                 return 'bg-yellow';
             default:
-                return ''; 
+                return '';
         }
     }
   }
@@ -302,7 +302,7 @@ export default {
 }
 
 .icon-large {
-    font-size: 2rem; 
+    font-size: 2rem;
 }
 
 .grid-view {
@@ -312,7 +312,7 @@ export default {
 }
 
 .employee-card {
-    flex: 1 0 calc(33.333% - 1rem); 
+    flex: 1 0 calc(33.333% - 1rem);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 1rem;
     border: 1px solid #e1e1e1;

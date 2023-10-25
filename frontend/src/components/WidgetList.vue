@@ -3,7 +3,7 @@
     <div class="p-4">
       <h3 lass="mt-5 mb-3" style="color:darkcyan;">Employee Salary Analysis</h3>
       <div class="card">
-        
+
         <!-- Card Header -->
         <div class="card-header">
           >>see more
@@ -12,7 +12,7 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="row">
-            
+
             <!-- All Employees Card -->
             <div class="col-md-3">
               <div class="card">
@@ -53,11 +53,11 @@
               </div>
             </div>
 
-          </div> 
-        </div> 
-      </div> 
-    </div> 
-  </div> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 
@@ -67,7 +67,7 @@ import { ref, onMounted } from 'vue';
 import apiService from "@/services/apiService";
 
 export default {
-  name: "widgetList",  
+  name: "widgetList",
 
   setup() {
     const employees = ref([]);
