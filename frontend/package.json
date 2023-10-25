@@ -10,11 +10,14 @@
   "dependencies": {
     "@hennge/vue3-pagination": "^1.0.17",
     "axios": "^1.5.1",
+    "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.1",
     "core-js": "^3.8.3",
+    "popper.js": "^1.16.1",
     "sweetalert2": "^11.7.32",
     "vue": "^3.2.13",
     "vue-router": "^4.2.5",
+    "vuejs-paginate": "^2.1.0",
     "vuetify": "^3.3.22"
   },
   "devDependencies": {

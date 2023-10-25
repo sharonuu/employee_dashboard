@@ -50,7 +50,7 @@ public class EmployeeServiceImplTest {
         employee.setEmployeeLastName("Doe");
         employee.setEmployeeSalary(5000.0F);
 
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findById(1L)).thenReturn(employee); // changed from Optional.of
 
         Employee foundEmployee = employeeService.getEmployeeById(1L);
 
@@ -60,12 +60,10 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void testGetEmployeeById_whenEmployeeDoesNotExist() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(employeeRepository.findById(1L)).thenReturn(null); // changed from Optional.empty()
 
         Employee foundEmployee = employeeService.getEmployeeById(1L);
 
         assertNull(foundEmployee);
     }
-
-
 }

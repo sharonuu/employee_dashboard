@@ -1,19 +1,22 @@
 <template>
+  <HeaderNav> </HeaderNav>
   <div class="container">
-    <HeaderNav> </HeaderNav>
     <WidgetList></WidgetList>
     <slot></slot>
   </div>
+  <FooterInfo/>
 </template>
 
 <script>
 import HeaderNav from "./HeaderNav.vue"
 import WidgetList from "./WidgetList.vue"
+import FooterInfo from "./FooterInfo.vue";
 export default {
   name: "LayoutDiv",
   components: {
     HeaderNav,
-    WidgetList
+    WidgetList,
+    FooterInfo
   }
 };
 </script>

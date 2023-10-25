@@ -6,6 +6,10 @@ import EmployeeEdit from "./components/EmployeeEdit";
 import EmployeeList from "./components/EmployeeList";
 import EmployeeCreate from "./components/EmployeeCreate";
 
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
