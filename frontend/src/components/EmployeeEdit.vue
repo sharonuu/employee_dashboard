@@ -34,6 +34,20 @@
               id="salary"
               name="salary"
             />
+            <label htmlFor="position">Position</label>
+            <input
+              v-model="employee.employeePos"
+              type="text"
+              class="form-control mb-4"
+              id="pos"
+              name="pos"
+            />
+            <label htmlFor="status">Status</label>
+            <select v-model="employee.employeeStatus" class="form-select mr-1" aria-label="status">
+              <option selected value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+              <option value="ON_LEAVE">ON LEAVE</option>
+            </select>
           </div>
 
           <button
@@ -65,9 +79,12 @@ export default {
   data() {
     return {
         employee: {
-        employeeFirstName: "",
-        employeeLastName: "",
-        employeeSalary: 0.0,
+          employeeId: "",
+          employeeFirstName: "",
+          employeeLastName: "",
+          employeeSalary: "",
+          employeePos: "",
+          employeeStatus: "ACTIVE"
       },
       isSaving: false,
     };
@@ -86,6 +103,8 @@ export default {
           this.employee.employeeFirstName = response.data.employeeFirstName;
           this.employee.employeeLastName = response.data.employeeLastName;
           this.employee.employeeSalary = response.data.employeeSalary;
+          this.employee.employeePos = response.data.employeePos;
+          this.employee.employeeStatus = response.data.employeeStatus;
         })
         .catch(() => {
           Swal.fire({

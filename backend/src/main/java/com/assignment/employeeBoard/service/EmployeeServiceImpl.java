@@ -3,58 +3,93 @@ package com.assignment.employeeBoard.service;
 import com.assignment.employeeBoard.entity.Employee;
 import com.assignment.employeeBoard.repository.EmployeeRepository;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
     @Autowired
-    private EmployeeRepository employeeRepository;
-
-    public EmployeeServiceImpl() {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
+    @Override
     public Employee saveEmployee(Employee employee) {
-        return (Employee)this.employeeRepository.save(employee);
+        employeeRepository.save(employee);
+        return employee; // Note: This won't return the generated ID unless you modify the save method in the repository to do so.
     }
 
+    @Override
     public List<Employee> fetchAllEmployees() {
-        List<Employee> allEmployee = this.employeeRepository.findAll();
-        return allEmployee;
+        return employeeRepository.findAll();
     }
 
+    @Override
     public Employee getEmployeeById(Long id) {
-        Optional<Employee> employee = this.employeeRepository.findById(id);
-        return employee.isPresent() ? (Employee)employee.get() : null;
+        return employeeRepository.findById(id);
     }
 
-    public Employee updateEmployeeById(Long id, Employee employee) {
-        Optional<Employee> employee1 = this.employeeRepository.findById(id);
-        if (employee1.isPresent()) {
-            Employee originalEmployee = (Employee)employee1.get();
-            if (Objects.nonNull(employee.getEmployeeFirstName()) && !"".equalsIgnoreCase(employee.getEmployeeFirstName())) {
-                originalEmployee.setEmployeeFirstName(employee.getEmployeeFirstName());
-            }
+    @Override
+    public List<Employee> searchEmployee(Long id, String firstName, String lastName, Float salary, String pos) {
+        return employeeRepository.searchEmployees(id, firstName, lastName, salary, pos);
+    }
 
-            if (Objects.nonNull(employee.getEmployeeLastName()) && !"".equalsIgnoreCase(employee.getEmployeeLastName())) {
-                originalEmployee.setEmployeeLastName(employee.getEmployeeLastName());
-            }
+    @Override
+    public Map<String, Object> analyze() {
+        return employeeRepository.analyze();
+    }
 
-            if (Objects.nonNull(employee.getEmployeeSalary()) && employee.getEmployeeSalary() != 0.0F) {
-                originalEmployee.setEmployeeSalary(employee.getEmployeeSalary());
-            }
+    @Override
+    public List<Employee> getActiveEmployees() {
+        return employeeRepository.getActiveEmployees();
+    }
 
-            return (Employee)this.employeeRepository.save(originalEmployee);
-        } else {
-            return null;
+    @Override
+    public List<Employee> getInactiveEmployees() {
+        return employeeRepository.getInactiveEmployees();
+    }
+
+    @Override
+    public List<Employee> getOnLeaveEmployees() {
+        return employeeRepository.getOnLeaveEmployees();
+    }
+
+    @Override
+    public Employee updateEmployeeById(Long id, Employee updatedEmployee) {
+        Employee originalEmployee = employeeRepository.findById(id);
+        if (originalEmployee != null) {
+            updateIfNotNullOrEmpty(originalEmployee::setEmployeeFirstName, updatedEmployee.getEmployeeFirstName());
+            updateIfNotNullOrEmpty(originalEmployee::setEmployeeLastName, updatedEmployee.getEmployeeLastName());
+            updateIfNotNullOrEmpty(originalEmployee::setEmployeePos, updatedEmployee.getEmployeePos());
+            if (updatedEmployee.getEmployeeSalary() != 0.0F) {
+                originalEmployee.setEmployeeSalary(updatedEmployee.getEmployeeSalary());
+            }
+            if (updatedEmployee.getEmployeeStatus() != null) {
+                originalEmployee.setEmployeeStatus(updatedEmployee.getEmployeeStatus());
+            }
+            employeeRepository.update(originalEmployee);
+            return originalEmployee;
+        }
+        return null;
+    }
+
+    private void updateIfNotNullOrEmpty(Consumer<String> setter, String value) {
+        if (value != null && !value.trim().isEmpty()) {
+            setter.accept(value);
         }
     }
 
+    @Override
     public String deleteEmployeeById(Long id) {
-        if (this.employeeRepository.findById(id).isPresent()) {
-            this.employeeRepository.deleteById(id);
+        Employee existingEmployee = employeeRepository.findById(id);
+        if (existingEmployee != null) {
+            employeeRepository.delete(id);
             return "Employee deleted successfully!";
         } else {
             return "No such employee in the database";
