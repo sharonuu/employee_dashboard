@@ -9,6 +9,9 @@ A full-stack application to manage employees. This application showcases an Empl
 - Edit employee details.
 - Delete an employee record.
 - Create a new employee.
+- Search employees by categories(EmpId, first name, last name, salary, position).
+- Show employees' status.
+- Display as a table or grid.
 
 ## Prerequisites
 
@@ -65,13 +68,19 @@ The application will be accessible at `http://localhost:8080` (or another port i
 
 ## API Endpoints
 
-| Endpoint                  | HTTP Method | Description                               | Request Body                                                        | Response Body                   |
-|--------------------------|-------------|----------------------------------------|-------------------------------------------------------------------|---------------------------------|
-| `/api/employee`           | `POST`      | Create a new employee                   | JSON of the employee (e.g., `{"employeeFirstName": "John"}`)      | JSON of the created employee    |
-| `/api/employees`          | `GET`       | Retrieve all employees                  | None                                                              | JSON array of all employees     |
-| `/api/employee/{id}`      | `GET`       | Retrieve a specific employee by its ID  | None                                                              | JSON of the retrieved employee  |
-| `/api/employee/{id}`      | `PUT`       | Update a specific employee's details    | JSON with details to update (e.g., `{"employeeFirstName": "Jane"}`)| JSON of the updated employee    |
-| `/api/employee/{id}`      | `DELETE`    | Delete a specific employee by its ID    | None                                                              | Message indicating success/failure  |
+| Endpoint                  | HTTP Method | Description                                           | Request Body                                                                    | Response Body                                    |
+|--------------------------|-------------|-------------------------------------------------------|--------------------------------------------------------------------------------|-------------------------------------------------|
+| `/api/employees`          | `POST`      | Create a new employee                                 | JSON of the employee (e.g., `{"employeeFirstName": "John"}`)                    | JSON of the created employee                     |
+| `/api/employees`         | `GET`       | Retrieve all employees                                | None                                                                            | JSON array of all employees                      |
+| `/api/employees/{id}`     | `GET`       | Retrieve a specific employee by its ID                | None                                                                            | JSON of the retrieved employee                   |
+| `/api/employees/{id}`     | `PUT`       | Update a specific employee's details                  | JSON with details to update (e.g., `{"employeeFirstName": "Jane"}`)            | JSON of the updated employee                     |
+| `/api/employees/{id}`     | `DELETE`    | Delete a specific employee by its ID                  | None                                                                            | Message indicating success/failure               |
+| `/api/employees/search`                | `GET`       | Searches for employees based on provided criteria     | Query Parameters: `employeeId`, `employeeFirstName`, `employeeLastName`, etc.  | List of Employee objects matching criteria       |
+| `/api/employees/analyze`               | `GET`       | Provides a detailed analysis of the employees         | None                                                                            | Map containing analysis results                  |
+| `/api/employees/active`                | `GET`       | Retrieves a list of all active employees              | None                                                                            | List of active Employee objects                  |
+| `/api/employees/inactive`              | `GET`       | Retrieves a list of all inactive employees            | None                                                                            | List of inactive Employee objects                |
+| `/api/employees/on_leave`              | `GET`       | Retrieves a list of all employees currently on leave  | None                                                                            | List of Employee objects on leave                |
+
 
 ### Sample Request and Response
 
@@ -79,7 +88,11 @@ The application will be accessible at `http://localhost:8080` (or another port i
 **Request Body:**
 ```json
 {
+    "employeeId": 111,
     "employeeFirstName": "John",
     "employeeLastName": "Doe",
-    "employeeSalary": 50000
+    "employeeSalary": 50000,
+    "employeePos": "Software engineer",
+    "employeeStatus": "ACTIVE"
+   
 }
